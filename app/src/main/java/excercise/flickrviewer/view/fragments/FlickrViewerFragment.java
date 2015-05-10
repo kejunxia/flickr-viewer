@@ -36,7 +36,7 @@ public class FlickrViewerFragment extends BaseFragment {
     RecyclerView roller;
     @InjectView(R.id.progress_bar)
     ProgressBar progressBar;
-    private RecyclerView.LayoutManager layoutManager;
+    private LinearLayoutManager layoutManager;
     private RecyclerView.Adapter rollerAdapter;
 
     private ImageViewerController imageViewerController;
@@ -71,6 +71,38 @@ public class FlickrViewerFragment extends BaseFragment {
             }
         });
         initImages();
+
+        setSync();
+    }
+
+    private void setSync() {
+        gallery.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                layoutManager.scrollToPosition(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        roller.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            private int lastState = RecyclerView.SCROLL_STATE_IDLE;
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if(lastState != newState && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    gallery.setCurrentItem(layoutManager.findFirstCompletelyVisibleItemPosition(), false);
+                }
+                lastState = newState;
+            }
+        });
     }
 
     private void initImages() {
