@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">FlickrViewer</string>
+
+    <string name="flickr_error">Error: %s</string>
+</resources>
